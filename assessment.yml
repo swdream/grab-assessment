@@ -1,0 +1,16 @@
+- hosts: all
+  become: true
+  roles:
+    - {role: base, tags: ['base']}
+    - {role: pip, tags: ['pip']}
+    - {role: mysql, tags: ['mysql']}
+    - {role: php, tags: ['php']}
+    - {role: nginx, tags: ['nginx']}
+    - {role: wordpress, tags: ['workpress']}
+    - {role: java, tags: ['java']}
+    - {role: mongodb, tags: ['mongodb']}
+    - {role: elasticsearch, tags: ['elasticsearch']}
+    - {role: graylog2, tags: ['graylog2']}
+    - {role: influxdb, tags: ['influxdb']}
+    - {role: grafana, tags: ['grafana']}
+    - {role: telegraf, tags: ['telegraf']}

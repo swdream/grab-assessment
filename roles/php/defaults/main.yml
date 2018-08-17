@@ -1,0 +1,12 @@
+---
+
+extensions_packages:
+  - php-curl
+  - php-gd
+  - php-mbstring
+  - php-mcrypt
+  - php-xml
+  - php-xmlrpc
+  - php-cli
+  - php-fpm
+  - php-mysql

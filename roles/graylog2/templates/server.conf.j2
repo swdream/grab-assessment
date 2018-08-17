@@ -1,0 +1,80 @@
+############################
+# GRAYLOG CONFIGURATION FILE
+############################
+#
+# This is the Graylog configuration file. The file has to use ISO 8859-1/Latin-1 character encoding.
+
+is_master = true
+
+node_id_file = /etc/graylog/server/node-id
+
+# You MUST set a secret to secure/pepper the stored user passwords here. Use at least 64 characters.
+# Generate one by using for example: pwgen -N 1 -s 96
+password_secret = {{ graylog_password_secret }}
+
+# The default root user is named 'admin'
+#root_username = admin
+
+root_password_sha2 = 794ceb00a54c71d563102f7f63e6ae7ea526128835861fc74d6c1bbb81122a28
+
+# The email address of the root user.
+# Default is empty
+#root_email = ""
+
+#root_timezone = UTC
+
+# Set plugin directory here (relative or absolute)
+plugin_dir = /usr/share/graylog-server/plugin
+
+rest_listen_uri = http://{{ graylog_server }}:9000/api/
+web_listen_uri = http://{{ graylog_server }}:9000/
+
+
+rotation_strategy = count
+elasticsearch_hosts = http://{{ elasticsearch_host }}:9200
+elasticsearch_max_docs_per_index = 20000000
+elasticsearch_max_number_of_indices = 20
+retention_strategy = delete
+elasticsearch_shards = 4
+elasticsearch_replicas = 0
+elasticsearch_index_prefix = graylog
+allow_leading_wildcard_searches = false
+allow_highlighting = false
+elasticsearch_analyzer = standard
+output_batch_size = 500
+output_flush_interval = 1
+output_fault_count_threshold = 5
+output_fault_penalty_seconds = 30
+processbuffer_processors = 5
+outputbuffer_processors = 3
+processor_wait_strategy = blocking
+ring_size = 65536
+inputbuffer_ring_size = 65536
+inputbuffer_processors = 2
+inputbuffer_wait_strategy = blocking
+message_journal_enabled = true
+lb_recognition_period_seconds = 3
+mongodb_uri = mongodb://{{ mongodb_host }}/graylog
+
+# Authenticate against the MongoDB server
+#mongodb_uri = mongodb://grayloguser:secret@localhost:27017/graylog
+
+mongodb_max_connections = 1000
+
+mongodb_threads_allowed_to_block_multiplier = 5
+
+# Email transport
+transport_email_enabled = true
+transport_email_hostname = mail.google.com
+transport_email_port = 465
+transport_email_use_auth = true
+transport_email_use_tls = false
+transport_email_use_ssl = false
+transport_email_auth_username = {{ alert_email_user }}
+transport_email_auth_password = {{ alert_email_password }}
+transport_email_subject_prefix = [Graylog-Alert]
+transport_email_from_email = {{ alert_email_user }}
+
+content_packs_dir = /usr/share/graylog-server/contentpacks
+content_packs_auto_load = grok-patterns.json
+proxied_requests_thread_pool_size = 32

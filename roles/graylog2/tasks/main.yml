@@ -1,0 +1,54 @@
+---
+
+- name: Install pwgen Package
+  apt:
+    name: "pwgen"
+    state: present
+    update_cache: yes
+
+- name: Download Graylog repository
+  get_url:
+    url: https://packages.graylog2.org/repo/packages/graylog-2.4-repository_latest.deb
+    dest: /tmp/graylog-2.4-repository_latest.deb
+
+- name: Install Graylog repository
+  apt:
+    deb: /tmp/graylog-2.4-repository_latest.deb
+  become: true
+
+- name: Install graylog-server
+  apt:
+    name: "graylog-server"
+    state: present
+    update_cache: yes
+
+- name: Copy graylog server configuration file
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/graylog/server/{{item}}"
+    owner: graylog
+    group: graylog
+    mode: 0640
+  with_items:
+    - server.conf
+  notify:
+    - restart graylog-server service
+
+- name: Make sure data directory exits
+  file:
+    name: /data/journal
+    state: directory
+    owner: graylog
+    group: graylog
+    mode: 0770
+
+- name: Ensure graylog-server started at boot
+  service:
+    name: "graylog-server"
+    state: started
+    enabled: yes
+
+- name: Open graylog-server web port
+  ufw:
+    rule: allow
+    port: "{{ graylog_server_web_port }}"

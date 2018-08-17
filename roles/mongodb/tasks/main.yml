@@ -1,0 +1,35 @@
+---
+
+- name: Add APT key
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com:80
+    id: 7F0CEB10
+
+- name: Add mongodb Repository
+  apt_repository:
+    repo: deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main
+    state: present
+    update_cache: yes
+
+- name: Install mongodb
+  apt:
+    name: "mongodb-org"
+    state: present
+    update_cache: yes
+
+- name: Copy mongodb Configuration File
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/{{item}}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - mongod.conf
+  notify:
+    - restart mongod service
+
+- name: Ensure mongodb started at boot
+  service:
+    name: "mongod"
+    enabled: yes

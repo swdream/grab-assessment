@@ -1,0 +1,42 @@
+---
+
+- name: Add APT key
+  apt_key:
+    url: https://packages.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Install apt-transport-https package
+  apt:
+    name: "apt-transport-https"
+    state: present
+    update_cache: yes
+
+- name: Add Repository
+  apt_repository:
+    repo: deb https://packages.elastic.co/elasticsearch/2.x/debian stable main
+    state: present
+    update_cache: yes
+
+- name: Install elasticsearch
+  apt:
+    name: "elasticsearch"
+    state: present
+    update_cache: yes
+
+- name: Copy elasticsearch Configuration File
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/elasticsearch/{{item}}"
+    owner: root
+    group: elasticsearch
+    mode: 0660
+  with_items:
+    - "elasticsearch.yml"
+  notify:
+    - restart elasticsearch service
+
+- name: Ensure elasticsearch Started At Boot
+  service:
+    name: "elasticsearch"
+    state: started
+    enabled: yes

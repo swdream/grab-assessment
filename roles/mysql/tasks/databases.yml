@@ -1,0 +1,9 @@
+---
+
+- name: Create mysql databases
+  mysql_db:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - "{{ mysql.wordpress_db }}"
+    - "{{ mysql.grafana_db }}"

@@ -1,0 +1,41 @@
+---
+
+- name: Import GPG Signing Key
+  apt_key:
+    url: https://packagecloud.io/gpg.key
+    state: present
+
+- name: Add Grafana repository
+  apt_repository:
+    repo: deb https://packagecloud.io/grafana/stable/debian/ stretch main
+    state: present
+    update_cache: yes
+
+- name: Intall Grafana
+  apt:
+    name: "grafana"
+    state: present
+    update_cache: yes
+
+- name: Copy Grafana Configuration File
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/grafana/{{item}}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - grafana.ini
+  notify:
+    - restart grafana-server service
+
+- name: Ensure Grafana Started At Boot
+  service:
+    name: "grafana-server"
+    state: started
+    enabled: yes
+
+- name: Open grafana-server Web Port
+  ufw:
+    rule: allow
+    port: "{{ grafana_web_port }}"

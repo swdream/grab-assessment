@@ -1,0 +1,6 @@
+---
+
+influxdb_server: 127.0.0.1
+influxdb_database_name: telegraf
+influxdb_user_name: telegraf
+influxdb_user_password: influxdb_password_of_user_telegraf

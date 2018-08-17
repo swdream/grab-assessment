@@ -1,0 +1,5 @@
+---
+
+- name: Set timezone for OS
+  timezone:
+    name: "{{ server_time_zone }}"

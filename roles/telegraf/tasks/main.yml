@@ -1,0 +1,42 @@
+---
+
+- name: Import GPG signing key
+  apt_key:
+    url: https://repos.influxdata.com/influxdb.key
+    state: present
+
+- name: Add Repository
+  apt_repository:
+    repo: deb https://repos.influxdata.com/ubuntu xenial  stable
+    state: present
+    update_cache: yes
+
+- name: Install apt-transport-https
+  apt:
+    name: "apt-transport-https"
+    state: present
+    update_cache: yes
+
+- name: Intall telegraf
+  apt:
+    name: "telegraf"
+    state: present
+    update_cache: yes
+
+- name: Copy Telegraf Configuration File
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/telegraf/{{item}}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - telegraf.conf
+  notify:
+    - restart telegraf service
+
+- name: Ensure telegraf Started At Boot
+  service:
+    name: "telegraf"
+    state: started
+    enabled: yes

@@ -1,0 +1,11 @@
+---
+
+- name: Install Additional PHP Extensions
+  apt:
+    name: "{{item}}"
+    update_cache: yes
+    state: present
+  with_items:
+    - "{{ extensions_packages }}"
+  notify:
+    - restart php service

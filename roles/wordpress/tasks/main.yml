@@ -1,0 +1,60 @@
+---
+
+- name: Download WordPress
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp/wordpress.tar.gz
+    validate_certs: false
+    mode: 0750
+
+- name: Extract WordPress
+  unarchive:
+    src: /tmp/wordpress.tar.gz
+    dest: /var/www/html
+    copy: false
+    owner: www-data
+    group: www-data
+    mode: 07550
+
+- name: set permission for root directory
+  file:
+    path: /var/www/html/wordpress/
+    state: directory
+    mode: 0750
+    owner: www-data
+    group: www-data
+
+- name: Copy wp config file
+  template:
+    src: "{{ item }}.j2"
+    dest: "/var/www/html/wordpress/{{ item }}"
+    owner: www-data
+    group: www-data
+    mode: 0750
+  with_items:
+    - "wp-config.php"
+
+- name: Create upload folder
+  file:
+    path: /var/www/html/wordpress/wp-content/uploads
+    state: directory
+    mode: 0750
+    owner: www-data
+    group: www-data
+
+- name: Copy nginx configuration file for wordpress
+  template:
+    src: "{{item}}.j2"
+    dest: "/etc/nginx/conf.d/{{ item }}"
+    owner: www-data
+    group: www-data
+    mode: 0644
+  with_items:
+    - wordpress.conf
+  notify:
+    - restart nginx service
+
+- name: Open wordpress web port
+  ufw:
+    rule: allow
+    port: "{{ wordpress_web_port }}"

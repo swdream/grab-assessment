@@ -1,0 +1,52 @@
+---
+
+- name: Download MySQL Software Repository
+  get_url:
+    url: 'https://dev.mysql.com/get/mysql-apt-config_0.8.3-1_all.deb'
+    dest: '/tmp/mysql-apt-config_0.8.3-1_all.deb'
+  register: download_mysql_repo
+
+- name: Add MySQL Software Repository
+  apt:
+    deb: '/tmp/mysql-apt-config_0.8.3-1_all.deb'
+    update_cache: yes
+    state: present
+  register: add_mysql_repo
+  when: download_mysql_repo is defined
+
+- name: Install MySQL and required packages
+  apt:
+    name: "{{item}}"
+    update_cache: yes
+    state: present
+  when: add_mysql_repo is defined
+  with_items:
+    - "{{ mysql_packages }}"
+    - "{{ required_packages }}"
+
+- name: Install required python mysqlclient lib to create databases and users
+  pip:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - mysqlclient
+
+- name: Run MySQL
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Bind mysql remote address
+  ini_file: dest=/etc/my.cnf
+            section=mysqld
+            option=bind-address
+            value={{item}}
+  with_items:
+    - "{{ mysql.bind }}"
+  notify:
+    - restart mysql service
+
+- include: secure_installation.yml
+- include: databases.yml
+- include: users.yml

@@ -1,0 +1,48 @@
+---
+
+- name: Import InfluxDB GPG Signing Key
+  apt_key:
+    url: https://repos.influxdata.com/influxdb.key
+    state: present
+
+- name: Add InfluxDB Repository
+  apt_repository:
+    repo: deb https://repos.influxdata.com/ubuntu xenial  stable
+    state: present
+    update_cache: yes
+
+- name: Intall InfluxDB
+  apt:
+    name: "influxdb"
+    state: present
+    update_cache: yes
+
+- name: Copy InfluxDB configuration file
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/influxdb/{{item}}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - influxdb.conf
+  notify:
+    - restart influxdb service
+
+- name: Ensure InfluxDB started at boot
+  service:
+    name: "influxdb"
+    state: started
+    enabled: yes
+
+- name: Install influxdb python package
+  pip:
+    name: "influxdb"
+    state: present
+
+- name: Create database
+  influxdb_database:
+    hostname: "{{ influxdb_host }}"
+    database_name: "{{ influxdb_database_name }}"
+    username: "{{ influxdb_user_name }}"
+    password: "{{ influxdb_user_password }}"

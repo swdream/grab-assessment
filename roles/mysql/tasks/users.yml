@@ -1,0 +1,10 @@
+---
+
+- name: Create mysql user
+  mysql_user:
+    name: '{{ item.key }}'
+    password: '{{ item.value.password }}'
+    priv: '{{ item.value.privileges }}'
+    host: '{{ item.value.host }}'
+    state: present
+  with_dict: "{{ mysql.users }}"
