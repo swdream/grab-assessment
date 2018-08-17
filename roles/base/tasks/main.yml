@@ -1,0 +1,10 @@
+---
+
+# Create admin users with ssh keys
+- include: admin_users.yml
+
+# Setup ssh config
+- include: ssh_config.yml
+
+# Setup timezone
+- include: timezone.yml

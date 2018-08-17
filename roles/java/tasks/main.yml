@@ -1,0 +1,36 @@
+---
+
+- name: Install Java JRE and JDK
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "default-jre"
+    - "default-jdk"
+
+- name: Add Oracle's PPA
+  apt_repository:
+    repo: "{{ java_repo_name }}"
+    state: present
+
+- name: Install Java 8
+  apt:
+    name: "{{ java_package_name }}"
+    update_cache: yes
+    state: present
+
+# Environment setup.
+- name: Set JAVA_HOME if configured.
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/profile.d/{{ item }}"
+    mode: 0644
+  with_items:
+    - "java_home.sh"
+
+- name: Install Java alternatives
+  alternatives:
+    name: java
+    link: /usr/bin/java
+    path: "{{ java_home }}/bin/java"

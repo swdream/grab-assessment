@@ -1,0 +1,11 @@
+---
+
+mysql_server: 127.0.0.1
+grafana_mysql_db: grafana
+grafana_mysql_user: grafana
+grafana_mysql_password: mysql_password_for_user_grafana
+
+alert_email_user: grafana_alert@email.test
+alert_email_password: grafana_alert_password
+
+grafana_web_port: 3000

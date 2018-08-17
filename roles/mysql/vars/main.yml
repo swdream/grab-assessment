@@ -1,0 +1,19 @@
+---
+
+mysql:
+  wordpress_db: wordpress
+  grafana_db: grafana
+  users:
+    wordpress:
+      password: mysql_password_for_user_wordpress
+      privileges: 'wordpress.*:ALL'
+      host: '%'
+    grafana:
+      password: mysql_password_for_user_grafana
+      privileges: 'grafana.*:ALL'
+      host: '%'
+  bind:
+    - 0.0.0.0
+
+mysql_root_username: root
+mysql_root_password: mysql_password_for_user_root

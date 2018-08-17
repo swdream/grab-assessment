@@ -1,0 +1,11 @@
+---
+
+graylog_server: grabtest.swdream.org
+elasticsearch_host: 127.0.0.1
+mongodb_host: 127.0.0.1
+graylog_server_web_port: 9000
+
+graylog_password_secret: graylog_password_secret
+
+alert_email_user: graylog_alert@email.test
+alert_email_password: graylog_alert_password

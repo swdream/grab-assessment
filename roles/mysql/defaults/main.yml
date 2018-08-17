@@ -1,0 +1,10 @@
+---
+
+mysql_packages:
+  - mysql-server
+  - mysql-client
+  - python-mysqldb
+
+required_packages:
+  - python-dev
+  - libmysqlclient-dev

@@ -1,0 +1,16 @@
+---
+
+server_time_zone: "Asia/Ho_Chi_Minh"
+admin_group: 'admin'
+
+# admin users
+admin_list:
+  - name: "wordpress"
+    username: "wordpress"
+    keys:
+      active:
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeDuTQv0C3dBBvVeP8JZprK3Qp1T+3DG137JjTXnnA20LQIHLsVNY2cWDfkunPhc9fAHnh0a0YFntJDuAKql/uEKty/TpDCcfGMY/sJ9lZm2QtxqCuNPB9joG3ECHdBss7lJ9Kts8TE664Ah754Yzem6L2J0KKQn2jqCWVjDDDYVysP3ALxEJOhjqDoY/MK6vTk3IYQVFPs1Bdxcwh2UPNvM0iFgZxiOOJ897uAVTPQDhlQborzFQjl85j9lDfLe8X55j/yKi+lAXvNf5aQfyoftW89h2DF4ScwzlMke6TmUgm/zMTt6+6dw2qaIV7ey5mpVIiUGmp8tJEJAdun7st thanh_nt@Systems-MacBook-Pro-8.local"
+      disabled:
+        -
+    shell: "/bin/bash"
+    state: present

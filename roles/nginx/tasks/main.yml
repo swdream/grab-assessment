@@ -1,0 +1,25 @@
+---
+
+- name: Install nginx
+  apt:
+    name: "{{ nginx_package_name }}"
+    state: present
+    update_cache: yes
+
+- name: Copy nginx configuration file
+  template:
+    src: "{{item}}.j2"
+    dest: "/etc/nginx/{{item}}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - nginx.conf
+  notify:
+    - restart nginx service
+
+- name: Ensure nginx is started and enabled to start at boot
+  service:
+    name: nginx
+    state: started
+    enabled: yes
