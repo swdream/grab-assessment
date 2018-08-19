@@ -27,12 +27,12 @@ Main components are used:
 
 ### Email
 
-An Email which will be used by `Graylog2` and `Grafana` for notification, alerts.
+- An Email which will be used by `Graylog2` and `Grafana` for notification, alerts.
 
 ### DNS
 
 - Create a record A that point to your VM. In this case, I created a `grabtest.swdream.org` record.
-IP of VM can alse be used of the record is NOT created.
+IP of VM can also be used if the record is NOT created.
 
 ### Requirements
 
